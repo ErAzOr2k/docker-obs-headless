@@ -80,7 +80,7 @@ RUN \
  rm -rf /var/lib/apt/lists/* && \
  
  # add gstreamer plugin
- wget -P /tmp 'https://github.com/fzwoch/obs-gstreamer/releases/download/v0.3.5/obs-gstreamer.zip' && \
+ wget -P /tmp 'https://github.com/fzwoch/obs-gstreamer/releases/download/v0.4.0/obs-gstreamer.zip' && \
  unzip -d /tmp/obs-gstreamer /tmp/obs-gstreamer.zip && \
  cp /tmp/obs-gstreamer/linux/obs-gstreamer.so /usr/lib/x86_64-linux-gnu/obs-plugins/ && \
  rm -r /tmp/obs-gstreamer* 
