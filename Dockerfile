@@ -9,7 +9,7 @@ RUN \
  go build -o /bin/easy-novnc github.com/geek1011/easy-novnc
 
 ############## runtime stage ##############
-FROM ubuntu:latest
+FROM ubuntu:jammy
 
 # environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
