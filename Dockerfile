@@ -9,7 +9,7 @@ RUN \
  go build -o /bin/easy-novnc github.com/geek1011/easy-novnc
 
 ############## runtime stage ##############
-FROM ubuntu:jammy
+FROM ubuntu:noble
 
 # environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
@@ -39,7 +39,7 @@ RUN \
   wget \
   htop \
   tar \
-  xzip \
+  xz-utils \
   gzip \
   bzip2 \
   zip \
