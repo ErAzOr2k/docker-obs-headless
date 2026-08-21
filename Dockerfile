@@ -1,5 +1,5 @@
 ############## build stage ##############
-FROM golang:1.14-buster AS easy-novnc-build
+FROM golang:1.26.5-bookworm AS easy-novnc-build
 
 WORKDIR /src
 
@@ -9,30 +9,33 @@ RUN \
  go build -o /bin/easy-novnc github.com/geek1011/easy-novnc
 
 ############## runtime stage ##############
-FROM ubuntu:noble
+FROM ubuntu:26.04
 
 # environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
 
 RUN \
  # create user
+ userdel -r ubuntu && \
+ (groupdel ubuntu 2>/dev/null || true) && \
  useradd -u 1000 -U -m -s /bin/false obs && \
  usermod -G users obs && \
-
+ \
  # Install packages
  apt-get update -y && \
  apt-get upgrade -y && \
  apt-get install -y \
   software-properties-common && \
-    
- add-apt-repository "ppa:obsproject/obs-studio" && \   
+ \
+ add-apt-repository -y "ppa:obsproject/obs-studio" && \
  apt-get update -y && \
  apt-get install -y --no-install-recommends \
+  \
   # Misc
   openbox \
   supervisor \
   gosu \
-    
+  \
   # Tools
   lxterminal \
   nano \
@@ -43,19 +46,19 @@ RUN \
   gzip \
   bzip2 \
   zip \
-  unzip \   
+  unzip \
   net-tools \
   vainfo \
-    
+  \
   # VNC
   tigervnc-standalone-server \
   tigervnc-tools \
   tigervnc-xorg-extension \
-        
+  \
   # Drivers
   intel-media-va-driver-non-free \
-    
-  # Encoder/Decoder    
+  \
+  # Encoder/Decoder
   ffmpeg \
   vlc \
   gstreamer1.0-plugins-base \
@@ -70,20 +73,20 @@ RUN \
   gstreamer1.0-gtk3 \
   gstreamer1.0-qt5 \
   gstreamer1.0-pulseaudio \
-    
+  \
   # OBS
   obs-studio && \
- 
- # clean   
+ \
+ # clean
  apt-get autoclean && \
  apt-get autoremove -y && \
  rm -rf /var/lib/apt/lists/* && \
- 
+ \
  # add gstreamer plugin
- wget -P /tmp 'https://github.com/fzwoch/obs-gstreamer/releases/download/v0.4.0/obs-gstreamer.zip' && \
+ wget -P /tmp 'https://github.com/fzwoch/obs-gstreamer/releases/download/v0.4.1/obs-gstreamer.zip' && \
  unzip -d /tmp/obs-gstreamer /tmp/obs-gstreamer.zip && \
  cp /tmp/obs-gstreamer/linux/obs-gstreamer.so /usr/lib/x86_64-linux-gnu/obs-plugins/ && \
- rm -r /tmp/obs-gstreamer* 
+ rm -r /tmp/obs-gstreamer*
 
 # add local files
 COPY --from=easy-novnc-build /bin/easy-novnc /usr/local/bin/
