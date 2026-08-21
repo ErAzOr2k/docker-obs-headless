@@ -75,6 +75,7 @@ RUN \
   gstreamer1.0-pulseaudio \
   \
   # OBS
+  qt6-svg-plugins \
   obs-studio && \
  \
  # clean
